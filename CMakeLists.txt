@@ -6,4 +6,6 @@ set(CMAKE_CXX_STANDARD 26)
 add_executable(cppAssembly main.cpp
         commons.cpp
         header/commons.h
+        multithreading.cpp
+        header/multithreading.h
 )

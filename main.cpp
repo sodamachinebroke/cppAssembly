@@ -1,70 +1,7 @@
 #include <iostream>
-#include <ranges>
 #include <vector>
-#include <thread>
 #include "header/commons.h"
-
-const unsigned int NUM_THREADS = std::thread::hardware_concurrency();
-
-void createThreads(const std::vector<int> &vec, std::vector<int> &res_partialSums, int chunkSize);
-
-void sumPartial(const std::vector<int> &vec, int start, int end, int &result);
-
-void avgPartial(const std::vector<int> &vec, int start, int end, int &result);
-
-int sumMThread(const std::vector<int> &vec, int chunkSize);
-
-int sumSThread(std::vector<int> &vec);
-
-int main(int argc, char *argv[]) {
-    std::vector<int> aVec;
-
-    commons::fillVector(aVec, 100, 0, 2);
-    int chunkSize = aVec.size() / NUM_THREADS;
-
-    std::cout << "Sum of our vector calculated by a single thread: " << sumSThread(aVec) << std::endl;
-    std::cout << "Sum of our vector calculated with many threads: " << sumMThread(aVec, chunkSize) << std::endl;
-    return 0;
-}
-
-void createThreads(const std::vector<int> &vec, std::vector<int> &res_partialSums, int chunkSize) {
-    std::vector<int> loc_partialSums(NUM_THREADS);
-
-    std::vector<std::thread> threads;
-
-    for (int i = 0; i < NUM_THREADS; ++i) {
-        int start = i * chunkSize;
-        int end = (i == NUM_THREADS - 1) ? vec.size() : (i + 1) * chunkSize;
-        threads.emplace_back(sumPartial, std::ref(vec), start, end, std::ref(loc_partialSums[i]));
-    }
-
-    for (auto &thread: threads) {
-        thread.join();
-    }
-
-    for (int loc_partial_sum: loc_partialSums) {
-        res_partialSums.push_back(loc_partial_sum);
-    }
-
-}
-
-void sumPartial(const std::vector<int> &vec, int start, int end, int &result) {
-    int partialSum = 0;
-    for (int i = start; i < end; ++i) {
-        partialSum += vec[i];
-    }
-    result = partialSum;
-}
-
-void avgPartial(const std::vector<int> &vec, int start, int end, int &result) {
-    int partialAvg = 0;
-    int divisor = end - start;
-    for (int i = start; i < end; ++i) {
-        partialAvg += vec[i];
-    }
-    partialAvg = partialAvg / divisor;
-    result = partialAvg;
-}
+#include "header/multithreading.h"
 
 int sumSThread(std::vector<int> &vec) {
     int sum = 0;
@@ -74,19 +11,38 @@ int sumSThread(std::vector<int> &vec) {
     return sum;
 }
 
-
-
-int sumMThread(const std::vector<int> &vec, int chunkSize) {
-    std::vector<int> partialSums;
-    int totalSum = 0;
-
-    createThreads(vec, partialSums, chunkSize);
-    for (int partial_sum: partialSums) {
-        totalSum+= partial_sum;
-    }
-
-    return totalSum;
+int ASMsumSThread(std::vector<int> &vec) {
+    int sum;
+    asm volatile(
+        "xor %[sum], %[sum]\n"                      // Initialize sum to 0
+        "mov %[vec], %[vec]\n"                      // Move the address of vec to a register
+        "mov %[end], %[vec_end]\n"                  // Move the end address of vec to a register
+        "loop_start:\n"
+        "cmp %[vec], %[end]\n"                      // Compare the current address with the end address
+        "je loop_end\n"                             // If they are equal, jump to the end of the loop
+        "mov eax, dword ptr [%[vec]]\n"             // Load the current value of vec into EAX
+        "add %[sum], eax\n"                         // Add the value to sum
+        "add %[vec], 4\n"                           // Move to the next element of vec (assuming int is 4 bytes)
+        "jmp loop_start\n"                          // Jump back to the start of the loop
+        "loop_end:\n"
+        : [sum] "=r" (sum),                         // Output: sum (register)
+        [vec] "+r" (vec)                            // Input/Output: vec (register)
+        : [vec_end] "r" (vec.data() + vec.size())   // Input: vec_end (register)
+        : "eax", "cc"                               // Clobbered registers: EAX, condition codes
+    );
+    return sum;
 }
 
-int avgMThread
 
+int main(int argc, char *argv[]) {
+    std::vector<int> aVec;
+
+    commons::fillVector(aVec, 100000, 1, 200000);
+    int chunkSize = aVec.size() / NUM_THREADS;
+
+    std::cout << "Sum of our vector calculated by a single thread: " << sumSThread(aVec) << std::endl;
+    std::cout << "Sum of our vector calculated using inline assembly: " << ASMsumSThread(aVec) << std::endl;
+    std::cout << "Sum of our vector calculated with many threads: " << multithreading::sumMThread(aVec, chunkSize) <<
+            std::endl;
+    return 0;
+}

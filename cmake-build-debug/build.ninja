@@ -61,6 +61,12 @@ build CMakeFiles/cppAssembly.dir/commons.cpp.obj: CXX_COMPILER__cppAssembly_unsc
   OBJECT_DIR = CMakeFiles\cppAssembly.dir
   OBJECT_FILE_DIR = CMakeFiles\cppAssembly.dir
 
+build CMakeFiles/cppAssembly.dir/multithreading.cpp.obj: CXX_COMPILER__cppAssembly_unscanned_Debug D$:/DOKUMENTUMOK/Personal/cppAssembly/multithreading.cpp || cmake_object_order_depends_target_cppAssembly
+  DEP_FILE = CMakeFiles\cppAssembly.dir\multithreading.cpp.obj.d
+  FLAGS = -g -std=gnu++23 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\cppAssembly.dir
+  OBJECT_FILE_DIR = CMakeFiles\cppAssembly.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target cppAssembly
@@ -69,7 +75,7 @@ build CMakeFiles/cppAssembly.dir/commons.cpp.obj: CXX_COMPILER__cppAssembly_unsc
 #############################################
 # Link the executable cppAssembly.exe
 
-build cppAssembly.exe: CXX_EXECUTABLE_LINKER__cppAssembly_Debug CMakeFiles/cppAssembly.dir/main.cpp.obj CMakeFiles/cppAssembly.dir/commons.cpp.obj
+build cppAssembly.exe: CXX_EXECUTABLE_LINKER__cppAssembly_Debug CMakeFiles/cppAssembly.dir/main.cpp.obj CMakeFiles/cppAssembly.dir/commons.cpp.obj CMakeFiles/cppAssembly.dir/multithreading.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\cppAssembly.dir
