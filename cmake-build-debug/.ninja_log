@@ -1,0 +1,20 @@
+# ninja log v5
+6	815	7362237063829542	CMakeFiles/cppAssembly.dir/main.cpp.obj	cf655a87e4e6e063
+815	938	7362237065018959	cppAssembly.exe	3c7c6ba0e70000be
+6	856	7362230851549191	CMakeFiles/cppAssembly.dir/pSort.cpp.obj	99be75ad2dcd4d0a
+2	296	7362244280097103	build.ninja	a97747e8d343184a
+2	317	7362244280097103	build.ninja	a97747e8d343184a
+31	916	7362244289844215	CMakeFiles/cppAssembly.dir/commons.cpp.obj	df971d233e3e40cc
+6	1132	7362244806408008	CMakeFiles/cppAssembly.dir/main.cpp.obj	cf655a87e4e6e063
+1132	1285	7362244807904214	cppAssembly.exe	50456a2ee15ccbd4
+6	1104	7362245192142523	CMakeFiles/cppAssembly.dir/main.cpp.obj	cf655a87e4e6e063
+1104	1242	7362245193497907	cppAssembly.exe	50456a2ee15ccbd4
+6	1116	7362250114617305	CMakeFiles/cppAssembly.dir/main.cpp.obj	cf655a87e4e6e063
+1116	1259	7362250116011587	cppAssembly.exe	50456a2ee15ccbd4
+6	1125	7362251859572443	CMakeFiles/cppAssembly.dir/main.cpp.obj	cf655a87e4e6e063
+1125	1266	7362251860953533	cppAssembly.exe	50456a2ee15ccbd4
+13	977	7362255399308605	CMakeFiles/cppAssembly.dir/commons.cpp.obj	df971d233e3e40cc
+6	1171	7362255401238754	CMakeFiles/cppAssembly.dir/main.cpp.obj	cf655a87e4e6e063
+1171	1312	7362255402622680	cppAssembly.exe	50456a2ee15ccbd4
+6	1271	7362261072520896	CMakeFiles/cppAssembly.dir/main.cpp.obj	cf655a87e4e6e063
+1271	1416	7362261073941401	cppAssembly.exe	50456a2ee15ccbd4
