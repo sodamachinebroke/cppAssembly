@@ -11,38 +11,69 @@ int sumSThread(std::vector<int> &vec) {
     return sum;
 }
 
-/*int ASMsumSThread(std::vector<int> &vec) {
-    int sum;
-    asm volatile(
-        "xor %[sum], %[sum]\n"                      // Initialize sum to 0
-        "mov %[vec], %[vec]\n"                      // Move the address of vec to a register
-        "mov %[end], %[vec_end]\n"                  // Move the end address of vec to a register
-        "loop_start:\n"
-        "cmp %[vec], %[end]\n"                      // Compare the current address with the end address
-        "je loop_end\n"                             // If they are equal, jump to the end of the loop
-        "mov eax, dword ptr [%[vec]]\n"             // Load the current value of vec into EAX
-        "add %[sum], eax\n"                         // Add the value to sum
-        "add %[vec], 4\n"                           // Move to the next element of vec (assuming int is 4 bytes)
-        "jmp loop_start\n"                          // Jump back to the start of the loop
-        "loop_end:\n"
-        : [sum] "=r" (sum),                         // Output: sum (register)
-        [vec] "+r" (vec)                            // Input/Output: vec (register)
-        : [vec_end] "r" (vec.data() + vec.size())   // Input: vec_end (register)
-        : "eax", "cc"                               // Clobbered registers: EAX, condition codes
-    );
+int asmVecSum(std::vector<int> &vec) {
+    int sum = 0;
+    for (int vechelp: vec) {
+        __asm__ __volatile__
+        (
+            "addl %%eax, %%ebx;"
+            : "=b" (sum)
+            : "a" (vechelp), "b" (sum)
+        );
+    }
     return sum;
+}
+
+/*void asmLoop() {                                                          //this doesn't work yet, shouldn't touch
+    int result;
+    int array[] = {1, 2, 3, 4, 5};
+    int array_size = std::size(array);
+    asm volatile
+    (
+    "xorl %[result], %[result] \n" // Initialize result to 0
+    "xorl %%eax, %%eax \n" // Clear loop counter
+
+    "loop_start: \n"
+    "addl (%%ebx, %%eax, 4), %%ecx \n" // Add array element to result
+    "addl %%ecx, %[result] \n"
+    "incl %%eax \n" // Increment loop counter
+    "cmpl %[size], %%eax \n" // Compare loop counter with array size
+    "jl loop_start \n" // Jump back to loop_start if loop counter is less than array size
+    : [result] "=r" (result) // Output operand
+    : [array] "b" (array), [size] "r" (array_size) // Input operands
+    : "%eax", "ecx" // Clobbered registers
+    );
+
+    std::cout << "Result:" << result << std::endl;
 }*/
 
-
 int main(int argc, char *argv[]) {
-    std::vector<int> aVec;
+    /*std::vector<int> aVec;
 
-    commons::fillVector(aVec, 100000, 1, 200000);
+    commons::fillVector(aVec, 10, 0, 1);
     int chunkSize = aVec.size() / NUM_THREADS;
 
-    std::cout << "Sum of our vector calculated by a single thread: " << sumSThread(aVec) << std::endl;
-    //std::cout << "Sum of our vector calculated using inline assembly: " << ASMsumSThread(aVec) << std::endl;
-    std::cout << "Sum of our vector calculated with many threads: " << multithreading::sumMThread(aVec, chunkSize) <<
-            std::endl;
+
+    std::cout << "Inline assembly adds numbers 2 and 3: " << asmAdd(2, 3) << std::endl;
+    std::cout << "Security summing algorithm: " << multithreading::sumMThread(aVec, chunkSize) << std::endl;
+    std::cout << "Inline asssembly sum our vector's values: " << asmVecSum(aVec) << std::endl;*/
+
+    //A loop with assembly
+    /*int result;
+    asm
+    (
+    "xorl %[result], %[result] \n" // Initialize result to 0
+    "movl $0, %%eax \n" // Initialize loop counter to 0
+    "movl $10, %%ebx \n" // Set loop count to 10
+
+    "loop_start: \n"
+    "addl %%eax, %[result] \n" // Add loop counter to result
+    "incl %%eax \n" // Increment loop counter
+    "cmpl %%ebx, %%eax \n" // Compare loop counter with loop count
+    "jl loop_start \n" // Jump back to loop_start if loop counter is less than loop count
+    : [result] "=r" (result) // Output operand
+    : // No input operands
+    : "%eax", "%ebx" // Clobbered registers
+    );*/
     return 0;
 }
