@@ -11,7 +11,7 @@ int sumSThread(std::vector<int> &vec) {
     return sum;
 }
 
-int ASMsumSThread(std::vector<int> &vec) {
+/*int ASMsumSThread(std::vector<int> &vec) {
     int sum;
     asm volatile(
         "xor %[sum], %[sum]\n"                      // Initialize sum to 0
@@ -31,7 +31,7 @@ int ASMsumSThread(std::vector<int> &vec) {
         : "eax", "cc"                               // Clobbered registers: EAX, condition codes
     );
     return sum;
-}
+}*/
 
 
 int main(int argc, char *argv[]) {
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     int chunkSize = aVec.size() / NUM_THREADS;
 
     std::cout << "Sum of our vector calculated by a single thread: " << sumSThread(aVec) << std::endl;
-    std::cout << "Sum of our vector calculated using inline assembly: " << ASMsumSThread(aVec) << std::endl;
+    //std::cout << "Sum of our vector calculated using inline assembly: " << ASMsumSThread(aVec) << std::endl;
     std::cout << "Sum of our vector calculated with many threads: " << multithreading::sumMThread(aVec, chunkSize) <<
             std::endl;
     return 0;
