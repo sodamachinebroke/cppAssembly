@@ -1,25 +1,14 @@
 #include <iostream>
 #include <vector>
+
 #include "header/commons.h"
 #include "header/multithreading.h"
+#include "header/assembly.h"
 
 int sumSThread(std::vector<int> &vec) {
     int sum = 0;
     for (auto vechelp: vec) {
         sum += vechelp;
-    }
-    return sum;
-}
-
-int asmVecSum(std::vector<int> &vec) {
-    int sum = 0;
-    for (int vechelp: vec) {
-        __asm__ __volatile__
-        (
-            "addl %%eax, %%ebx;"
-            : "=b" (sum)
-            : "a" (vechelp), "b" (sum)
-        );
     }
     return sum;
 }
@@ -48,15 +37,17 @@ int asmVecSum(std::vector<int> &vec) {
 }*/
 
 int main(int argc, char *argv[]) {
-    /*std::vector<int> aVec;
+    std::vector<int> aVec;
 
-    commons::fillVector(aVec, 10, 0, 1);
+    commons::fillVector(aVec, 100000, 0, 100);
     int chunkSize = aVec.size() / NUM_THREADS;
 
-
-    std::cout << "Inline assembly adds numbers 2 and 3: " << asmAdd(2, 3) << std::endl;
+    std::cout << "Single threaded summing starts now! " << std::endl;
+    std::cout << "Security summing algorithm: " << sumSThread(aVec) << std::endl;
+    std::cout << "Multi threaded summing starts now!" << std::endl;
     std::cout << "Security summing algorithm: " << multithreading::sumMThread(aVec, chunkSize) << std::endl;
-    std::cout << "Inline asssembly sum our vector's values: " << asmVecSum(aVec) << std::endl;*/
+    std::cout << "Assembly summing starts now!" << std::endl;
+    std::cout << "Inline asssembly sum our vector's values: " << lowLevel::asmVecSum(aVec) << std::endl;
 
     //A loop with assembly
     /*int result;

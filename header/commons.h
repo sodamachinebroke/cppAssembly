@@ -11,7 +11,6 @@
 class commons {
 public:
     static int randGen(int low, int high);
-
     static void fillVector(std::vector<int> &vec, int size, int low, int high);
 };
 

@@ -8,4 +8,6 @@ add_executable(cppAssembly main.cpp
         header/commons.h
         multithreading.cpp
         header/multithreading.h
+        header/assembly.h
+        assembly.cpp
 )
